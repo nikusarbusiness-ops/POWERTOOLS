@@ -13,21 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repository herunterladen
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Java 21 installieren
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
-      - name: PowerTools kompilieren
-        run: mvn -B clean package
+      - name: Build PowerTools
+        run: |
+          mvn -B -U clean package
+        env:
+          MAVEN_OPTS: "-Dmaven.wagon.httpconnectionManager.ttlSeconds=25"
 
-      - name: JAR bereitstellen
+      - name: Upload Plugin JAR
         uses: actions/upload-artifact@v4
         with:
           name: PowerTools-1.0.0
           path: target/PowerTools-1.0.0.jar
+          if-no-files-found: error
