@@ -14,23 +14,22 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Setup Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
       - name: Build PowerTools
-        run: |
-          mvn -B -U clean package
-        env:
-          MAVEN_OPTS: "-Dmaven.wagon.httpconnectionManager.ttlSeconds=25"
+        run: mvn -B -U clean package
 
       - name: Upload Plugin JAR
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: PowerTools-1.0.0
           path: target/PowerTools-1.0.0.jar
